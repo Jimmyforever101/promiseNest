@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Promise Nest Restaurant | Arusha, Tanzania</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ivory:    #faf7f2;
+      --warm-white: #fffef9;
+      --bark:     #3b2314;
+      --bark-mid: #5c3820;
+      --rust:     #b8522a;
+      --rust-light: #d4784e;
+      --amber:    #c98b2e;
+      --amber-light: #e8b84b;
+      --sage:     #3d5c38;
+      --sage-light: #5a7a54;
+      --sand:     #e8dcc8;
+      --sand-dark: #d4c4a8;
+      --text:     #2e1c0e;
+      --text-mid: #6b4c35;
+      --text-soft:#9a7a65;
+      --border:   rgba(59,35,20,0.12);
+      --shadow:   0 4px 28px rgba(59,35,20,0.09);
+      --shadow-lg:0 12px 48px rgba(59,35,20,0.15);
+      --r:        14px;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--warm-white);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    h1,h2,h3,h4 { font-family:'Cormorant Garamond', serif; }
+    em { color: var(--rust); font-style:italic; }
+    a { text-decoration:none; color:inherit; }
+    img { max-width:100%; display:block; object-fit:cover; }
+
+    /* ── NAV ──────────────────────────────────── */
+    .nav {
+      position: fixed;
+      top:0; left:0; right:0;
+      z-index: 900;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.1rem 5%;
+      background: rgba(250,247,242,0.94);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      transition: padding 0.3s, box-shadow 0.3s;
+    }
+    .nav.scrolled { padding: 0.65rem 5%; box-shadow: var(--shadow); }
+
+    .logo {
+      font-family:'Cormorant Garamond', serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--bark);
+      letter-spacing: -0.5px;
+    }
+    .logo span { color: var(--rust); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-mid);
+      letter-spacing: 0.3px;
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content:'';
+      position:absolute;
+      bottom:-3px; left:0;
+      width:0; height:1.5px;
+      background: var(--rust);
+      transition: width 0.3s;
+    }
+    .nav-links a:hover { color: var(--rust); }
+    .nav-links a:hover::after { width:100%; }
+
+    .hamburger {
+      display:none;
+      background:none; border:none;
+      font-size:1.4rem; cursor:pointer;
+      color: var(--bark);
+    }
+
+    /* Mobile Drawer */
+    .drawer {
+      display:none;
+      position:fixed;
+      inset:0;
+      background: var(--ivory);
+      z-index:1000;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:2.2rem;
+    }
+    .drawer.open { display:flex; }
+    .drawer a {
+      font-family:'Cormorant Garamond', serif;
+      font-size:2rem;
+      color: var(--bark);
+      transition: color 0.2s;
+    }
+    .drawer a:hover { color: var(--rust); }
+    .drawer-close {
+      position:absolute; top:1.5rem; right:1.5rem;
+      background:none; border:none;
+      font-size:1.5rem; cursor:pointer; color: var(--bark);
+    }
+
+    /* ── BUTTONS ──────────────────────────────── */
+    .btn {
+      display:inline-block;
+      padding: 0.8rem 2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.3px;
+      cursor:pointer;
+      border:none;
+      transition: all 0.22s;
+    }
+    .btn-primary {
+      background: var(--rust);
+      color: white;
+      box-shadow: 0 4px 18px rgba(184,82,42,0.3);
+    }
+    .btn-primary:hover {
+      background: var(--bark-mid);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 26px rgba(184,82,42,0.38);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--rust);
+      border: 2px solid var(--rust);
+    }
+    .btn-outline:hover {
+      background: var(--rust);
+      color: white;
+    }
+    .btn-ghost {
+      background: rgba(255,255,255,0.15);
+      color: white;
+      border: 1.5px solid rgba(255,255,255,0.6);
+    }
+    .btn-ghost:hover {
+      background: rgba(255,255,255,0.28);
+    }
+
+    /* ── SECTION LABELS ───────────────────────── */
+    .label {
+      display:inline-block;
+      font-size:0.72rem;
+      font-weight:600;
+      letter-spacing:3px;
+      text-transform:uppercase;
+      color: var(--amber);
+      margin-bottom: 0.6rem;
+    }
+
+    /* ── HERO ─────────────────────────────────── */
+    #home {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 65% 25%, rgba(184,82,42,0.28) 0%, transparent 58%),
+        radial-gradient(ellipse at 15% 75%, rgba(61,92,56,0.22) 0%, transparent 50%),
+        linear-gradient(140deg, #1e0e06 0%, #2e1a0a 45%, #0f1e0a 100%);
+    }
+
+    /* Subtle woven texture */
+    .hero-texture {
+      position:absolute; inset:0;
+      background-image:
+        repeating-linear-gradient(45deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 12px),
+        repeating-linear-gradient(-45deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 12px);
+    }
+
+    /* Real hero image overlay — user can swap src */
+    .hero-photo {
+      position:absolute; inset:0;
+      background-image: url('images/hero.jpg');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.35;
+      mix-blend-mode: luminosity;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 720px;
+      padding: 9rem 5% 5rem;
+    }
+
+    .hero-eyebrow {
+      font-size:0.78rem;
+      font-weight:600;
+      letter-spacing:4px;
+      text-transform:uppercase;
+      color: var(--amber-light);
+      margin-bottom: 1.2rem;
+      opacity:0; animation: fadeUp 0.8s 0.1s forwards;
+    }
+
+    .hero-title {
+      font-size: clamp(3.2rem, 6.5vw, 6rem);
+      line-height: 1.05;
+      color: white;
+      margin-bottom: 1rem;
+      opacity:0; animation: fadeUp 0.8s 0.25s forwards;
+    }
+
+    .hero-motto {
+      font-family:'Cormorant Garamond', serif;
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: var(--amber-light);
+      font-style:italic;
+      margin-bottom: 1.4rem;
+      opacity:0; animation: fadeUp 0.8s 0.4s forwards;
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.75);
+      max-width: 500px;
+      margin-bottom: 2.5rem;
+      font-weight:300;
+      opacity:0; animation: fadeUp 0.8s 0.55s forwards;
+    }
+
+    .hero-btns {
+      display:flex; gap:1rem; flex-wrap:wrap;
+      opacity:0; animation: fadeUp 0.8s 0.7s forwards;
+    }
+
+    .scroll-cue {
+      position:absolute;
+      bottom:2.2rem; left:50%;
+      transform:translateX(-50%);
+      color:rgba(255,255,255,0.4);
+      font-size:0.7rem;
+      letter-spacing:2.5px;
+      animation: bob 2.2s infinite;
+    }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(28px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    @keyframes bob {
+      0%,100% { transform:translateX(-50%) translateY(0); }
+      50%      { transform:translateX(-50%) translateY(9px); }
+    }
+
+    /* ── FEATURE STRIP ────────────────────────── */
+    .strip {
+      display:grid;
+      grid-template-columns: repeat(4,1fr);
+      background: var(--rust);
+    }
+    .strip-item {
+      display:flex;
+      align-items:center;
+      gap:0.8rem;
+      padding:1.4rem 1.5rem;
+      color:white;
+      border-right:1px solid rgba(255,255,255,0.18);
+    }
+    .strip-item:last-child { border:none; }
+    .strip-icon { font-size:1.4rem; flex-shrink:0; }
+    .strip-item p { font-weight:500; font-size:0.88rem; }
+
+    /* ── SECTION WRAPPER ──────────────────────── */
+    .section { padding: 5.5rem 5%; }
+    .container { max-width:1240px; margin:0 auto; }
+    .section-head { text-align:center; margin-bottom:3.5rem; }
+    .section-head h2 { font-size:clamp(2rem,3.8vw,3rem); color:var(--bark); }
+
+    /* ── STORY ────────────────────────────────── */
+    #about {
+      background: var(--ivory);
+    }
+    .story-grid {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:5rem;
+      align-items:center;
+    }
+    .story-img-wrap { position:relative; }
+    .story-img {
+      width:100%; height:440px;
+      border-radius:var(--r);
+      object-fit:cover;
+      box-shadow:var(--shadow-lg);
+      background: linear-gradient(135deg, var(--rust), var(--bark-mid));
+      display:flex; align-items:center; justify-content:center;
+      font-size:4rem;
+      overflow:hidden;
+    }
+    .story-img img { width:100%; height:100%; object-fit:cover; }
+    .est-badge {
+      position:absolute;
+      bottom:-1.4rem; right:-1.4rem;
+      background:var(--amber);
+      color:white;
+      width:86px; height:86px;
+      border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Cormorant Garamond', serif;
+      font-weight:700; font-size:0.95rem;
+      text-align:center; line-height:1.2;
+      box-shadow:var(--shadow);
+    }
+    .story-text h2 { font-size:2.6rem; color:var(--bark); margin-bottom:1.4rem; line-height:1.15; }
+    .story-text p { color:var(--text-mid); margin-bottom:1.1rem; font-size:1.02rem; }
+    .story-quote {
+      border-left:3px solid var(--amber);
+      padding-left:1.2rem;
+      margin:1.5rem 0;
+      font-family:'Cormorant Garamond', serif;
+      font-size:1.15rem;
+      font-style:italic;
+      color:var(--rust);
+    }
+
+    /* ── MENU ─────────────────────────────────── */
+    #menu { background: var(--warm-white); }
+    .menu-tabs {
+      display:flex; gap:0.6rem; flex-wrap:wrap;
+      justify-content:center; margin-bottom:3rem;
+    }
+    .tab-btn {
+      padding:0.5rem 1.4rem;
+      border-radius:50px;
+      border:1.5px solid var(--border);
+      background:white;
+      color:var(--text-mid);
+      font-size:0.85rem;
+      font-weight:500;
+      cursor:pointer;
+      transition:all 0.2s;
+    }
+    .tab-btn:hover, .tab-btn.active {
+      background:var(--rust);
+      color:white;
+      border-color:var(--rust);
+    }
+    .menu-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fill, minmax(290px,1fr));
+      gap:1.5rem;
+    }
+    .menu-card {
+      background:white;
+      border-radius:var(--r);
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      transition:transform 0.25s, box-shadow 0.25s;
+      display:none;
+    }
+    .menu-card.visible { display:flex; flex-direction:column; }
+    .menu-card:hover { transform:translateY(-5px); box-shadow:var(--shadow-lg); }
+    .menu-card-img {
+      height:170px;
+      background: linear-gradient(135deg, var(--rust), var(--bark));
+      display:flex; align-items:center; justify-content:center;
+      font-size:3rem;
+      position:relative;
+      overflow:hidden;
+    }
+    .menu-card-img img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    .menu-badge {
+      position:absolute; top:0.8rem; left:0.8rem;
+      background:var(--amber);
+      color:white; padding:0.2rem 0.65rem;
+      border-radius:50px; font-size:0.7rem; font-weight:600;
+    }
+    .badge-vegan  { background:#4a7a44; }
+    .badge-popular{ background:var(--amber); }
+    .badge-sig    { background:var(--rust); }
+    .menu-info { padding:1.3rem 1.3rem 1.5rem; flex:1; display:flex; flex-direction:column; }
+    .menu-info h3 { font-size:1.1rem; color:var(--bark); margin-bottom:0.4rem; }
+    .menu-info p  { font-size:0.875rem; color:var(--text-soft); line-height:1.6; flex:1; }
+    .menu-price   { font-weight:700; color:var(--rust); font-size:1rem; margin-top:0.8rem; }
+
+    /* ── EXPERIENCE ───────────────────────────── */
+    #experience { background:var(--ivory); }
+    .exp-grid {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:5rem;
+      align-items:center;
+    }
+    .exp-text h2 { font-size:2.5rem; color:var(--bark); margin-bottom:1.3rem; }
+    .exp-text p  { color:var(--text-mid); margin-bottom:1.5rem; }
+    .exp-list    { list-style:none; margin-bottom:2.2rem; }
+    .exp-list li {
+      padding:0.55rem 0;
+      border-bottom:1px solid var(--border);
+      font-size:0.93rem;
+      color:var(--text);
+      display:flex; align-items:center; gap:0.5rem;
+    }
+    .exp-list li::before { content:'✦'; color:var(--amber); font-size:0.7rem; }
+    .exp-photos {
+      display:grid;
+      grid-template-columns:1.4fr 1fr;
+      gap:0.9rem;
+      height:420px;
+    }
+    .exp-photo {
+      border-radius:var(--r);
+      overflow:hidden;
+      background: linear-gradient(135deg, var(--sage), var(--sage-light));
+      display:flex; align-items:center; justify-content:center;
+      font-size:2.5rem;
+      position:relative;
+    }
+    .exp-photo img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    .exp-col { display:flex; flex-direction:column; gap:0.9rem; }
+    .exp-col .exp-photo { flex:1; }
+
+    /* ── GALLERY ──────────────────────────────── */
+    #gallery { background:var(--bark); }
+    #gallery .label { color:var(--amber-light); }
+    #gallery .section-head h2 { color:white; }
+    #gallery .section-head p  { color:rgba(255,255,255,0.6); margin-top:0.4rem; font-size:0.95rem; }
+
+    .gallery-grid {
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      grid-auto-rows:220px;
+      gap:0.85rem;
+    }
+    .g-item {
+      border-radius:10px;
+      overflow:hidden;
+      position:relative;
+      cursor:pointer;
+      background: var(--bark-mid);
+      display:flex; align-items:center; justify-content:center;
+      font-size:2.5rem;
+    }
+    .g-item img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform 0.5s; }
+    .g-item:hover img { transform:scale(1.07); }
+    .g-item.tall { grid-row:span 2; }
+    .g-item.wide { grid-column:span 2; }
+    .g-overlay {
+      position:absolute; inset:0;
+      background:linear-gradient(to top, rgba(30,14,6,0.75) 0%, transparent 55%);
+      display:flex; align-items:flex-end; padding:1rem;
+      opacity:0; transition:opacity 0.3s;
+    }
+    .g-item:hover .g-overlay { opacity:1; }
+    .g-overlay p { color:white; font-weight:500; font-size:0.82rem; }
+    .gallery-note {
+      text-align:center;
+      margin-top:1.5rem;
+      color:rgba(255,255,255,0.45);
+      font-size:0.82rem;
+      font-style:italic;
+    }
+
+    /* ── TESTIMONIALS ─────────────────────────── */
+    #testimonials { background:var(--warm-white); }
+    .testi-grid {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:1.8rem;
+      max-width:1100px;
+      margin:0 auto;
+    }
+    .testi-card {
+      background:white;
+      padding:2rem;
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      border-left:3px solid transparent;
+      transition:border-color 0.3s;
+    }
+    .testi-card:hover { border-left-color:var(--rust); }
+    .testi-card.featured {
+      background:var(--rust);
+      color:white;
+      border-left-color:var(--amber);
+    }
+    .stars { color:var(--amber); font-size:1rem; margin-bottom:0.85rem; }
+    .testi-card p { font-style:italic; font-size:0.92rem; line-height:1.75; color:var(--text-mid); margin-bottom:1.4rem; }
+    .testi-card.featured p { color:rgba(255,255,255,0.88); }
+    .reviewer { display:flex; align-items:center; gap:0.7rem; }
+    .avatar {
+      width:40px; height:40px; border-radius:50%;
+      background:var(--rust);
+      display:flex; align-items:center; justify-content:center;
+      font-size:0.75rem; font-weight:700; color:white;
+    }
+    .testi-card.featured .avatar { background:rgba(255,255,255,0.25); }
+    .reviewer strong { display:block; font-size:0.88rem; color:var(--bark); }
+    .testi-card.featured .reviewer strong { color:white; }
+    .reviewer span { font-size:0.75rem; color:var(--text-soft); }
+    .testi-card.featured .reviewer span { color:rgba(255,255,255,0.65); }
+
+    /* ── INFO CARDS ───────────────────────────── */
+    #info { background:var(--ivory); }
+    .info-grid {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:1.8rem;
+    }
+    .info-card {
+      background:white;
+      padding:2rem;
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+    }
+    .info-card h3 { font-size:1.1rem; color:var(--bark); margin-bottom:1rem; }
+    .info-card p  { color:var(--text-mid); font-size:0.92rem; line-height:1.75; }
+    .hours-tbl    { width:100%; border-collapse:collapse; }
+    .hours-tbl td { padding:0.35rem 0; font-size:0.88rem; color:var(--text-mid); }
+    .hours-tbl td:last-child { text-align:right; font-weight:600; color:var(--rust); }
+
+    /* ── FEEDBACK ─────────────────────────────── */
+    #feedback { background: var(--bark); }
+    #feedback .label { color:var(--amber-light); }
+    #feedback .section-head h2 { color:white; }
+    #feedback .section-head p  { color:rgba(255,255,255,0.6); margin-top:0.4rem; }
+
+    .feedback-wrap {
+      max-width:600px;
+      margin:0 auto;
+      background:white;
+      border-radius:var(--r);
+      padding:2.5rem;
+      box-shadow:var(--shadow-lg);
+    }
+
+    .form-group { margin-bottom:1.4rem; }
+    .form-label {
+      display:block;
+      font-weight:600;
+      font-size:0.85rem;
+      color:var(--bark);
+      margin-bottom:0.45rem;
+      letter-spacing:0.2px;
+    }
+    .form-input, .form-textarea, .form-select {
+      width:100%;
+      padding:0.8rem 1rem;
+      border:1.5px solid var(--border);
+      border-radius:8px;
+      font-family:'DM Sans', sans-serif;
+      font-size:0.92rem;
+      color:var(--text);
+      background:var(--ivory);
+      outline:none;
+      transition:border-color 0.2s;
+    }
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
+      border-color: var(--rust);
+      background:white;
+    }
+    .form-textarea { resize:vertical; min-height:110px; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .star-row { display:flex; gap:0.4rem; margin-top:0.3rem; }
+    .star-btn {
+      font-size:1.8rem; color:#ddd; cursor:pointer;
+      transition:color 0.15s, transform 0.15s;
+      background:none; border:none;
+      padding:0; line-height:1;
+    }
+    .star-btn.lit { color:var(--amber); transform:scale(1.15); }
+    .submit-btn {
+      width:100%;
+      padding:0.95rem;
+      font-size:0.95rem;
+      border-radius:8px;
+      background:var(--rust);
+      color:white;
+      border:none;
+      cursor:pointer;
+      font-weight:600;
+      font-family:'DM Sans', sans-serif;
+      transition:background 0.2s, transform 0.2s;
+    }
+    .submit-btn:hover { background:var(--bark-mid); transform:translateY(-1px); }
+    .form-note {
+      text-align:center;
+      font-size:0.78rem;
+      color:var(--text-soft);
+      margin-top:1rem;
+    }
+
+    /* ── FOOTER ───────────────────────────────── */
+    footer {
+      background:var(--bark);
+      border-top:1px solid rgba(255,255,255,0.08);
+      padding:3.5rem 5% 1.5rem;
+    }
+    .footer-grid {
+      display:grid;
+      grid-template-columns:2fr 1fr 1fr;
+      gap:3rem;
+      padding-bottom:2.5rem;
+      border-bottom:1px solid rgba(255,255,255,0.1);
+      margin-bottom:1.5rem;
+    }
+    .footer-brand .logo { color:white; display:block; margin-bottom:0.8rem; }
+    .footer-brand p  { color:rgba(255,255,255,0.55); font-size:0.88rem; line-height:1.7; }
+    .socials { display:flex; gap:0.6rem; margin-top:1.3rem; }
+    .socials a {
+      width:34px; height:34px; border-radius:50%;
+      background:rgba(255,255,255,0.1);
+      display:flex; align-items:center; justify-content:center;
+      font-size:0.72rem; font-weight:700; color:rgba(255,255,255,0.7);
+      transition:background 0.2s;
+    }
+    .socials a:hover { background:var(--rust); color:white; }
+    .footer-col h4 {
+      color:white; font-size:0.78rem; letter-spacing:2px;
+      text-transform:uppercase; margin-bottom:1.2rem;
+    }
+    .footer-col a {
+      display:block; color:rgba(255,255,255,0.55);
+      font-size:0.88rem; margin-bottom:0.55rem;
+      transition:color 0.2s;
+    }
+    .footer-col a:hover { color:var(--amber-light); }
+    .footer-bottom {
+      text-align:center;
+      font-size:0.78rem;
+      color:rgba(255,255,255,0.3);
+    }
+
+    /* ── RESPONSIVE ───────────────────────────── */
+    @media(max-width:1024px){
+      .strip { grid-template-columns:repeat(2,1fr); }
+      .story-grid, .exp-grid { grid-template-columns:1fr; gap:2.5rem; }
+      .testi-grid { grid-template-columns:1fr 1fr; }
+      .info-grid { grid-template-columns:1fr 1fr; }
+      .footer-grid { grid-template-columns:1fr 1fr; }
+      .gallery-grid { grid-template-columns:repeat(3,1fr); }
+    }
+    @media(max-width:768px){
+      .nav-links { display:none; }
+      .hamburger { display:block; }
+      .exp-photos { grid-template-columns:1fr; height:auto; }
+      .exp-col { flex-direction:row; }
+      .exp-col .exp-photo { height:180px; }
+      .exp-photo { height:240px; }
+      .exp-photo:first-child { height:240px; }
+      .testi-grid { grid-template-columns:1fr; }
+      .info-grid { grid-template-columns:1fr; }
+      .gallery-grid { grid-template-columns:repeat(2,1fr); }
+      .g-item.wide { grid-column:span 1; }
+      .form-row { grid-template-columns:1fr; }
+      .footer-grid { grid-template-columns:1fr; gap:2rem; }
+      .story-img { height:300px; }
+    }
+    @media(max-width:560px){
+      .strip { grid-template-columns:1fr 1fr; }
+      .strip-item { border-right:none; border-bottom:1px solid rgba(255,255,255,0.15); }
+      .gallery-grid { grid-template-columns:1fr 1fr; }
+      .g-item.tall { grid-row:span 1; }
+      .hero-title { font-size:2.8rem; }
+      .feedback-wrap { padding:1.8rem 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="navbar">
+  <a href="#home" class="logo">Promise<span>Nest</span></a>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">Our Story</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#feedback">Feedback</a></li>
+    <li><a href="#info">Contact</a></li>
+  </ul>
+  <button class="hamburger" onclick="openDrawer()">☰</button>
+</nav>
+
+<!-- MOBILE DRAWER -->
+<div class="drawer" id="drawer">
+  <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  <a href="#home" onclick="closeDrawer()">Home</a>
+  <a href="#about" onclick="closeDrawer()">Our Story</a>
+  <a href="#menu" onclick="closeDrawer()">Menu</a>
+  <a href="#gallery" onclick="closeDrawer()">Gallery</a>
+  <a href="#feedback" onclick="closeDrawer()">Feedback</a>
+  <a href="#info" onclick="closeDrawer()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-texture"></div>
+  <!-- Swap src with your own hero photo -->
+  <div class="hero-photo"></div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">Arusha · Tanzania</p>
+    <h1 class="hero-title">PROMISE NEST restaurant</h1>
+    <p class="hero-motto">"A nest of comfort, a promise of taste"</p>
+    <p class="hero-desc">Nestled beneath the shadow of Mount Kilimanjaro, Promise Nest weaves the warmth of East African tradition with the art of honest, soulful cuisine.</p>
+    <div class="hero-btns">
+      <a href="#menu" class="btn btn-primary">Explore Menu</a>
+      <a href="#feedback" class="btn btn-ghost">Leave Feedback</a>
+    </div>
+  </div>
+  <div class="scroll-cue">↓ scroll</div>
+</section>
+
+<!-- STRIP
+<div class="strip">
+  <div class="strip-item"><span class="strip-icon">🌿</span><p>Farm-Fresh Ingredients</p></div>
+  <div class="strip-item"><span class="strip-icon">🍽️</span><p>100+ Dishes</p></div>
+  <div class="strip-item"><span class="strip-icon">🌄</span><p>Kilimanjaro View</p></div>
+  <div class="strip-item"><span class="strip-icon">🎶</span><p>Live African Music</p></div>
+</div>
+-->
+<!-- OUR STORY -->
+<section id="about" class="section">
+  <div class="container">
+    <div class="story-grid">
+      <div class="story-img-wrap">
+        <!-- Replace with: <img src="images/story.jpg" alt="Our Story"> inside .story-img -->
+        <div class="story-img">
+          <img src="images/gallery/" alt="Promise Nest restaurant" onerror="this.style.display='none'"/>
+          🏡
+        </div>
+       <!-- <div class="est-badge">Est.<br/>2012</div>-->
+      </div>
+      <div class="story-text">
+        <p class="label">Our Story</p>
+        <h2>A Promise of <em>Genuine Taste</em></h2>
+        <p>Born from a mother's kitchen in the heart of Arusha, Promise Nest started as a simple dream — to feed people with love. Today, we're a landmark gathering spot where locals, adventurers, and food lovers come together over flavours that tell the story of Tanzania.</p>
+        <blockquote class="story-quote">"Food is how I say I love you." — Mama Francisca, Founder</blockquote>
+        <p>Every dish we serve carries a promise: honest ingredients, careful cooking, and a warm smile delivered with it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu" class="section">
+  <div class="container">
+    <div class="section-head">
+      <p class="label">Chef's Picks</p>
+      <h2>Must-Try <em>Dishes</em></h2>
+    </div>
+
+    <div class="menu-tabs">
+      <button class="tab-btn active" onclick="filterMenu('all',this)">All</button>
+      <button class="tab-btn" onclick="filterMenu('starters',this)">Starters</button>
+      <button class="tab-btn" onclick="filterMenu('mains',this)">Mains</button>
+      <button class="tab-btn" onclick="filterMenu('seafood',this)">Seafood</button>
+      <button class="tab-btn" onclick="filterMenu('vegan',this)">Vegan</button>
+      <button class="tab-btn" onclick="filterMenu('drinks',this)">Drinks</button>
+      <button class="tab-btn" onclick="filterMenu('desserts',this)">Desserts</button>
+    </div>
+
+    <div class="menu-grid" id="menuGrid">
+
+      <!-- STARTERS -->
+      <div class="menu-card visible" data-cat="starters">
+        <div class="menu-card-img">
+          <img src="images/menu/kachumbari.jpg" alt="Kachumbari" onerror="this.style.display='none'"/>🥗
+          <span class="menu-badge badge-vegan">Vegan</span>
+        </div>
+        <div class="menu-info">
+          <h3>Kachumbari Salad</h3>
+          <p>Fresh tomatoes, onions, cucumber and coriander with a citrus dressing.</p>
+          <div class="menu-price">TSh 6,000</div>
+        </div>
+      </div>
+
+      <div class="menu-card visible" data-cat="starters">
+        <div class="menu-card-img">
+          <img src="images/menu/mishkaki.jpg" alt="Mishkaki" onerror="this.style.display='none'"/>🍢
+          <span class="menu-badge badge-popular">Popular</span>
+        </div>
+        <div class="menu-info">
+          <h3>Mishkaki Skewers</h3>
+          <p>Marinated beef skewers grilled over charcoal, served with chili sauce.</p>
+          <div class="menu-price">TSh 10,000</div>
+        </div>
+      </div>
+
+      <div class="menu-card visible" data-cat="starters">
+        <div class="menu-card-img">
+          <img src="images/menu/samosa.jpg" alt="Samosa" onerror="this.style.display='none'"/>🥟
+        </div>
+        <div class="menu-info">
+          <h3>Samosa za Nyama</h3>
+          <p>Crispy pastry filled with spiced minced meat and herbs. Served hot.</p>
+          <div class="menu-price">TSh 7,000</div>
+        </div>
+      </div>
+
+      <!-- MAINS -->
+      <div class="menu-card visible" data-cat="mains">
+        <div class="menu-card-img">
+          <img src="images/menu/ugali.jpg" alt="Ugali" onerror="this.style.display='none'"/>🍲
+          <span class="menu-badge badge-sig">Signature</span>
+        </div>
+        <div class="menu-info">
+          <h3>Ugali na Nyama Choma</h3>
+          <p>Smoky grilled meats with hand-rolled ugali, kachumbari salsa, and roasted plantain.</p>
+          <div class="menu-price">TSh 18,000</div>
+        </div>
+      </div>
+
+      <div class="menu-card visible" data-cat="mains">
+        <div class="menu-card-img">
+          <img src="images/menu/pilau.jpg" alt="Pilau" onerror="this.style.display='none'"/>🍛
+          <span class="menu-badge badge-popular">Popular</span>
+        </div>
+        <div class="menu-info">
+          <h3>Pilau ya Nyama</h3>
+          <p>Fragrant spiced rice slow-cooked with beef, whole spices, and caramelised onions.</p>
+          <div class="menu-price">TSh 15,000</div>
+        </div>
+      </div>
+
+      <!-- SEAFOOD -->
+      <div class="menu-card visible" data-cat="seafood">
+        <div class="menu-card-img">
+          <img src="images/menu/tilapia.jpg" alt="Tilapia" onerror="this.style.display='none'"/>🐟
+          <span class="menu-badge badge-popular">Bestseller</span>
+        </div>
+        <div class="menu-info">
+          <h3>Tilapia ya Ziwa</h3>
+          <p>Whole lake tilapia fried crispy, served with coconut rice and tamarind dipping sauce.</p>
+          <div class="menu-price">TSh 22,000</div>
+        </div>
+      </div>
+<!--
+      <div class="menu-card visible" data-cat="seafood">
+        <div class="menu-card-img">
+          <img src="images/menu/calamari.jpg" alt="Calamari" onerror="this.style.display='none'"/>🦑
+        </div>
+        <div class="menu-info">
+          <h3>Calamari ya Pwani</h3>
+          <p>Coastal-style squid rings in a turmeric batter, served with garlic yoghurt dip.</p>
+          <div class="menu-price">TSh 19,000</div>
+        </div>
+      </div>
+    -->
+      <!-- VEGAN -->
+      <div class="menu-card visible" data-cat="vegan">
+        <div class="menu-card-img">
+          <img src="images/menu/mchicha.jpg" alt="Mchicha" onerror="this.style.display='none'"/>🥬
+          <span class="menu-badge badge-vegan">Vegan</span>
+        </div>
+        <div class="menu-info">
+          <h3>Mchicha wa Nazi</h3>
+          <p>Tender amaranth greens slow-cooked in fresh coconut milk, served with basmati rice.</p>
+          <div class="menu-price">TSh 12,000</div>
+        </div>
+      </div>
+
+      <div class="menu-card visible" data-cat="vegan">
+        <div class="menu-card-img">
+          <img src="images/menu/ndizi.jpg" alt="Ndizi" onerror="this.style.display='none'"/>🌱
+          <span class="menu-badge badge-vegan">Vegan</span>
+        </div>
+        <div class="menu-info">
+          <h3>Ndizi na Maharagwe</h3>
+          <p>Green plantains stewed with kidney beans, tomatoes, and African spices.</p>
+          <div class="menu-price">TSh 10,000</div>
+        </div>
+      </div>
+
+      <!-- DRINKS -->
+      <div class="menu-card visible" data-cat="drinks">
+        <div class="menu-card-img">
+          <img src="images/menu/dawa.jpg" alt="Dawa" onerror="this.style.display='none'"/>🍹
+          <span class="menu-badge badge-popular">Popular</span>
+        </div>
+        <div class="menu-info">
+          <h3>Dawa Cocktail</h3>
+          <p>The classic East African "medicine" — vodka, honey, lime, and crushed ice.</p>
+          <div class="menu-price">TSh 9,000</div>
+        </div>
+      </div>
+<!--
+      <div class="menu-card visible" data-cat="drinks">
+        <div class="menu-card-img">
+          <img src="images/menu/tangawizi.jpg" alt="Ginger juice" onerror="this.style.display='none'"/>🧃
+          <span class="menu-badge badge-vegan">Fresh</span>
+        </div>
+        <div class="menu-info">
+          <h3>Juice ya Tangawizi</h3>
+          <p>House-pressed ginger and lemon juice with a pinch of cayenne. Refreshingly bold.</p>
+          <div class="menu-price">TSh 5,000</div>
+        </div>
+      </div>
+-->
+      <!-- DESSERTS -->
+      <div class="menu-card visible" data-cat="desserts">
+        <div class="menu-card-img">
+          <img src="images/menu/mandazi.jpg" alt="Mandazi" onerror="this.style.display='none'"/>🍩
+          <span class="menu-badge badge-sig">Classic</span>
+        </div>
+        <div class="menu-info">
+          <h3>Mandazi Trio</h3>
+          <p>Fluffy fried doughnuts dusted with cardamom sugar, served warm with chai dipping cream.</p>
+          <div class="menu-price">TSh 6,000</div>
+        </div>
+      </div>
+
+    </div><!-- end menu-grid -->
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience" class="section">
+  <div class="container">
+    <div class="exp-grid">
+      <div class="exp-text">
+        <p class="label">The Experience</p>
+        <h2>More Than a <em>Restaurant</em></h2>
+        <p>At Promise Nest, dining is an event. From our open-air terrace with sweeping Arusha views, to our cozy candlelit interior — every seat is the best seat in the house.</p>
+        <ul class="exp-list">
+          <li>Open-air terrace seating for 80 guests</li>
+          <li>Private dining rooms for special occasions</li>
+          <li>Weekly live Taarab &amp; Bongo Flava nights</li>
+          <li>Children's play corner &amp; family-friendly space</li>
+          <li>Catering &amp; event hosting services</li>
+        </ul>
+        <a href="#feedback" class="btn btn-primary">Get in Touch</a>
+      </div>
+      
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery" class="section">
+  <div class="container">
+    <div class="section-head">
+      <p class="label">A Peek Into Our World</p>
+      <h2 style="color:white">Food, People &amp; <em style="color:var(--amber-light)">Moments</em></h2>
+      <p>Replace placeholder slots with your own photos</p>
+    </div>
+
+    <div class="gallery-grid">
+      <!-- Tall item -->
+      <div class="g-item tall">
+        <img src="images/gallery/g1.jpg" alt="Gallery 1" onerror="this.style.display='none'"/>🍲
+        <div class="g-overlay"><p>Ugali na Nyama Choma</p></div>
+      </div>
+      <div class="g-item">
+        <img src="images/gallery/g2.jpg" alt="Gallery 2" onerror="this.style.display='none'"/>🌅
+        <div class="g-overlay"><p>Terrace at Sunset</p></div>
+      </div>
+      <div class="g-item">
+        <img src="images/gallery/g3.jpg" alt="Gallery 3" onerror="this.style.display='none'"/>🕯️
+        <div class="g-overlay"><p>Evening Ambiance</p></div>
+      </div>
+      <!-- Wide item -->
+      <div class="g-item wide">
+        <img src="images/gallery/g4.jpg" alt="Gallery 4" onerror="this.style.display='none'"/>🎵
+        <div class="g-overlay"><p>Live Music Night</p></div>
+      </div>
+      <div class="g-item">
+        <img src="images/gallery/g5.jpg" alt="Gallery 5" onerror="this.style.display='none'"/>🐟
+        <div class="g-overlay"><p>Tilapia ya Ziwa</p></div>
+      </div>
+      <div class="g-item">
+        <img src="images/gallery/g6.jpg" alt="Gallery 6" onerror="this.style.display='none'"/>🌿
+        <div class="g-overlay"><p>Fresh Ingredients</p></div>
+      </div>
+      <div class="g-item">
+        <img src="images/gallery/g7.jpg" alt="Gallery 7" onerror="this.style.display='none'"/>👨‍🍳
+        <div class="g-overlay"><p>Kitchen Stories</p></div>
+      </div>
+      <div class="g-item">
+        <img src="images/gallery/g8.jpg" alt="Gallery 8" onerror="this.style.display='none'"/>🥂
+        <div class="g-overlay"><p>Celebrations</p></div>
+      </div>
+    </div>
+    <p class="gallery-note">📸 Add your photos to the <code>images/gallery/</code> folder (g1.jpg – g8.jpg) and they'll appear here automatically.</p>
+  </div>
+</section>
+
+<!-- TESTIMONIALS 
+<section id="testimonials" class="section">
+  <div class="container">
+    <div class="section-head">
+      <p class="label">Guest Voices</p>
+      <h2>What People <em>Say</em></h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p>"The nyama choma here is the best I've had in all of East Africa. The view, the ambiance, the smiles — Promise Nest delivers a full experience."</p>
+        <div class="reviewer">
+          <div class="avatar">AK</div>
+          <div>
+            <strong>Amina Kibanda</strong>
+            <span>Arusha Local</span>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card featured">
+        <div class="stars">★★★★★</div>
+        <p>"I stopped here after climbing Kilimanjaro and it was the perfect welcome back to civilisation. Honest, soulful food that made me feel human again."</p>
+        <div class="reviewer">
+          <div class="avatar">JM</div>
+          <div>
+            <strong>James Moretti</strong>
+            <span>Trekker, Italy</span>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p>"We held our wedding reception here and it was magical. The team went above and beyond. Guests are still talking about the food months later!"</p>
+        <div class="reviewer">
+          <div class="avatar">ZN</div>
+          <div>
+            <strong>Zara &amp; Neema</strong>
+            <span>Newlyweds, Moshi</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+-->
+<!-- INFO -->
+<section id="info" class="section">
+  <div class="container">
+    <div class="section-head">
+      <p class="label">Find Us</p>
+      <h2>Visit <em>Promise Nest</em></h2>
+    </div>
+    <div class="info-grid">
+      <div class="info-card">
+        <h3>🕐 Opening Hours</h3>
+        <table class="hours-tbl">
+          <tr><td>Monday – Friday</td><td>7:00 AM – 10:30 PM</td></tr>
+          <tr><td>Saturday</td><td>7:00 AM – 11:30 PM</td></tr>
+          <tr><td>Sunday</td><td>8:00 AM – 10:00 PM</td></tr>
+        </table>
+      </div>
+      <div class="info-card">
+        <h3>📍 Location</h3>
+        <p>Ngusero Road,Arusha<br/>Arusha, Tanzania</p>
+        <p style="margin-top:0.8rem">📞 +255 754 000 123<br/>✉️ hello@promisenest.co.tz</p>
+      </div>
+      <div class="info-card">
+        <h3>🎉 Events &amp; Catering</h3>
+        <p>Planning a birthday, wedding, or corporate event? We have dedicated event spaces and customisable menus for every occasion.</p>
+        <a href="#feedback" class="btn btn-outline" style="margin-top:1.2rem; display:inline-block">Enquire Now →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEEDBACK (Formspree) -->
+<section id="feedback" class="section">
+  <div class="container">
+    <div class="section-head">
+      <p class="label">Share Your Experience</p>
+      <h2>We'd Love to <em style="color:var(--amber-light)">Hear From You</em></h2>
+      <p style="color:rgba(255,255,255,0.6); margin-top:0.5rem; font-size:0.95rem;">Your feedback helps us keep our promise.</p>
+    </div>
+
+    <div class="feedback-wrap">
+      <!-- ⚙️  Replace YOUR_FORM_ID with your Formspree endpoint ID -->
+      <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" id="feedbackForm">
+        <input type="hidden" name="_subject" value="New feedback – Promise Nest"/>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Your Name</label>
+            <input class="form-input" type="text" name="name" placeholder="Amina Kibanda" required/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email (optional)</label>
+            <input class="form-input" type="email" name="email" placeholder="you@example.com"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Overall Rating</label>
+          <div class="star-row" id="starRow">
+            <button type="button" class="star-btn" data-val="1">★</button>
+            <button type="button" class="star-btn" data-val="2">★</button>
+            <button type="button" class="star-btn" data-val="3">★</button>
+            <button type="button" class="star-btn" data-val="4">★</button>
+            <button type="button" class="star-btn" data-val="5">★</button>
+          </div>
+          <input type="hidden" name="rating" id="ratingInput" value=""/>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">What did you enjoy most?</label>
+          <select class="form-select" name="highlight">
+            <option value="">Select one…</option>
+            <option>Food &amp; flavours</option>
+            <option>Service &amp; hospitality</option>
+            <option>Ambiance &amp; atmosphere</option>
+            <option>Value for money</option>
+            <option>Live music / events</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Your Message</label>
+          <textarea class="form-textarea" name="message" placeholder="Tell us about your visit…" required></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Send Feedback ✦</button>
+        <p class="form-note">We read every message and truly appreciate your time. 🙏</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="logo">Promise<span>Nest</span></span>
+      <p>A taste of Tanzania, crafted with love in the heart of Arusha.</p>
+      <div class="socials">
+        <a href="#">FB</a>
+        <a href="#">IG</a>
+        <a href="#">TW</a>
+        <a href="#">WA</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Navigate</h4>
+      <a href="#home">Home</a>
+      <a href="#about">Our Story</a>
+      <a href="#menu">Menu</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#feedback">Feedback</a>
+      <a href="#info">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <a href="tel:+255754000123">+255 754 000 123</a>
+      <a href="mailto:hello@promisenest.co.tz">hello@promisenest.co.tz</a>
+      <a href="#">Ngusero, Arusha</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 Promise Nest Restaurant · Made with ❤️ in Arusha · "A nest of comfort, a promise of taste"</p>
+  </div>
+</footer>
+
+<script>
+  // NAV scroll effect
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Mobile drawer
+  function openDrawer()  { document.getElementById('drawer').classList.add('open'); }
+  function closeDrawer() { document.getElementById('drawer').classList.remove('open'); }
+
+  // Menu filter
+  function filterMenu(cat, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.menu-card').forEach(card => {
+      const show = cat === 'all' || card.dataset.cat === cat;
+      card.classList.toggle('visible', show);
+    });
+  }
+
+  // Star rating
+  const stars = document.querySelectorAll('.star-btn');
+  const ratingInput = document.getElementById('ratingInput');
+  stars.forEach(s => {
+    s.addEventListener('click', () => {
+      const val = parseInt(s.dataset.val);
+      ratingInput.value = val;
+      stars.forEach(b => b.classList.toggle('lit', parseInt(b.dataset.val) <= val));
+    });
+  });
+
+  // Formspree: show thank-you on success
+  const form = document.getElementById('feedbackForm');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = form.querySelector('.submit-btn');
+    btn.textContent = 'Sending…';
+    btn.disabled = true;
+    try {
+      const res = await fetch(form.action, {
+        method:'POST',
+        body: new FormData(form),
+        headers:{ Accept:'application/json' }
+      });
+      if (res.ok) {
+        form.innerHTML = `
+          <div style="text-align:center; padding:2rem 0;">
+            <div style="font-size:3rem; margin-bottom:1rem;">🙏</div>
+            <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; color:var(--bark); margin-bottom:0.75rem;">Thank You!</h3>
+            <p style="color:var(--text-mid);">Your feedback has been received. We truly appreciate it.</p>
+          </div>`;
+      } else {
+        btn.textContent = 'Try Again';
+        btn.disabled = false;
+        alert('Oops — something went wrong. Please try again.');
+      }
+    } catch(err) {
+      btn.textContent = 'Try Again';
+      btn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>
